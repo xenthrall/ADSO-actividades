@@ -1,0 +1,3 @@
+# Ignorar todos los CSS compilados de Sass
+.css
+.css.map
