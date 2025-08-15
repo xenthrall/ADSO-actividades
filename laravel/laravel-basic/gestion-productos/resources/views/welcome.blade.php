@@ -17,6 +17,9 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="crear-tab" data-bs-toggle="tab" type="button" role="tab">Crear producto</button>
             </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="actualizar-tab" data-bs-toggle="tab" type="button" role="tab">Actualizar productos</button>
+            </li>
         </ul>
         <div id="tab-content" class="bg-white rounded shadow p-4 min-vh-50">
             <!-- El contenido se cargará aquí -->
@@ -39,6 +42,11 @@
             });
             $('#crear-tab').on('click', function() {
                 loadTabContent('/productos/create');
+                $(this).addClass('active');
+                $('#ver-tab').removeClass('active');
+            });
+            $('#actualizar-tab').on('click', function() {
+                loadTabContent('/productos/update');
                 $(this).addClass('active');
                 $('#ver-tab').removeClass('active');
             });
