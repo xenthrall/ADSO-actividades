@@ -8,6 +8,20 @@ use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
+    public function read(){
+        // Logic to read clients
+        $clientes = Cliente::all();
+        #dd($clientes);
+        return view('clientes.read', compact('clientes'));
+    }
+    public function update(Request $request, Cliente $cliente){
+        
+
+        $cliente->update($request->all());
+
+        return redirect()->back()->with('success', 'Cliente actualizado exitosamente.');
+    }
+
     public function create(){
         // Logic to create a new client
         return view('clientes.create');
