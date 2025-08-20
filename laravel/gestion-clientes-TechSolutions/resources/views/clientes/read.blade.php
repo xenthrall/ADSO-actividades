@@ -31,10 +31,20 @@
             <td>
                 <form action="{{ route('clientes.destroy',$cliente->id_cliente) }}" method="POST">
                         @csrf
-                        <button type="submit">Eliminar</button>
+                        <button type="button" class="btn btn-danger" type="submit">Eliminar</button>
                 </form>
             </td>
-            
+
+            <td>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal{{ $cliente->id_cliente }}">
+                    Editar
+                </button>
+
+                <!-- Modal -->
+                 @include('clientes.update')
+                
+
+            </td>
 
         </tr>
         @endforeach
