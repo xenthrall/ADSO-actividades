@@ -65,11 +65,17 @@
 
       <!-- Botón -->
       <div class="d-grid mt-4">
-        <button type="submit" class="btn btn-primary">Guardar Cliente</button>
+        <button type="submit" class="btn btn-dark">Guardar Cliente</button>
       </div>
     </form>
   </div>
    
 </div>
+@if (session('success'))
+<div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+</div>
+@endif
 
 @endsection

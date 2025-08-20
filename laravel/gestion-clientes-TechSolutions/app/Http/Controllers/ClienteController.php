@@ -45,4 +45,11 @@ class ClienteController extends Controller
 
         return redirect()->back()->with('success', 'Cliente creado exitosamente.');
     }
+
+    public function destroy($id)
+    {
+        $cliente = Cliente::findOrFail($id);
+        $cliente->delete();
+        return redirect()->back();
+    }
 }
