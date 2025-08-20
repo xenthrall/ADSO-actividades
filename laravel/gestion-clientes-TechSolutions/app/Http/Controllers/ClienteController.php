@@ -8,12 +8,16 @@ use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
-    public function read(){
+
+    public function index(){
         // Logic to read clients
         $clientes = Cliente::all();
         #dd($clientes);
-        return view('clientes.read', compact('clientes'));
+        return view('clientes.index', compact('clientes'));
     }
+
+
+
     public function update(Request $request, Cliente $cliente){
         
 
@@ -50,6 +54,11 @@ class ClienteController extends Controller
     {
         $cliente = Cliente::findOrFail($id);
         $cliente->delete();
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Cliente eliminado exitosamente.');
     }
+
+
+
+
+    
 }

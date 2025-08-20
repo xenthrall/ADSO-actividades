@@ -10,7 +10,7 @@
       <div class="modal-body">
         <form action="{{ route('clientes.update', $cliente->id_cliente) }}" method="POST">
           @csrf
-          @method('PUT')
+    
 
           <div class="row g-3">
             <!-- Nombre -->

@@ -10,6 +10,8 @@ class Cliente extends Model
     protected $primaryKey = 'id_cliente';
 
     protected $table = 'clientes';
+
+
     protected $fillable = [
         'nombre',
         'apellido',
@@ -20,6 +22,8 @@ class Cliente extends Model
         'fecha_registro',
         'genero'
     ];
+
+    
 
     public $timestamps = false;
 }
