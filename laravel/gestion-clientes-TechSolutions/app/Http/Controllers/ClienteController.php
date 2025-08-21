@@ -9,41 +9,47 @@ use Illuminate\Http\Request;
 class ClienteController extends Controller
 {
 
-    public function index(){
+    public function index()
+    {
         // Logic to read clients
         $clientes = Cliente::all();
         #dd($clientes);
         return view('clientes.index', compact('clientes'));
     }
 
-
-
-    public function update(Request $request, Cliente $cliente){
-        
-
+   
+    /**
+     * Actualizar un cliente existente
+     */
+    public function update(Request $request, $id)
+    {
+        $cliente = Cliente::findorfail($id);
         $cliente->update($request->all());
 
         return redirect()->back()->with('success', 'Cliente actualizado exitosamente.');
+
     }
 
-    public function create(){
+
+    public function create()
+    {
         // Logic to create a new client
         return view('clientes.create');
-
     }
 
-    public function store(Request $request){
-        
+    public function store(Request $request)
+    {
+
 
         $cliente = new Cliente();
-        $cliente->nombre = $request-> nombre;
-        $cliente->apellido = $request-> apellido;
-        $cliente->direccion = $request-> direccion;
-        $cliente->fecha_nacimiento = $request-> fecha_nacimiento;
-        $cliente->telefono = $request-> telefono;
-        $cliente->email = $request-> email;
-        $cliente->fecha_registro = $request-> fecha_registro;
-        $cliente->genero = $request-> genero;
+        $cliente->nombre = $request->nombre;
+        $cliente->apellido = $request->apellido;
+        $cliente->direccion = $request->direccion;
+        $cliente->fecha_nacimiento = $request->fecha_nacimiento;
+        $cliente->telefono = $request->telefono;
+        $cliente->email = $request->email;
+        $cliente->fecha_registro = $request->fecha_registro;
+        $cliente->genero = $request->genero;
 
         $cliente->save();
 
@@ -56,9 +62,4 @@ class ClienteController extends Controller
         $cliente->delete();
         return redirect()->back()->with('success', 'Cliente eliminado exitosamente.');
     }
-
-
-
-
-    
 }
