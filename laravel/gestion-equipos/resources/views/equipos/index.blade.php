@@ -33,10 +33,11 @@
                 <td>{{$equipo -> fundacion}}</td>
                 <td>{{$equipo -> liga}}</td>
                 <td>
-                    <a href="" class="btn btn-success">Editar</a>
+                    <a href="{{route('equipos.edit', $equipo->id)}}" class="btn btn-success">Editar</a>
                 </td>
                 <td>
-                    <form action="">
+                    <form action="{{route('equipos.destroy', $equipo->id)}}" method="post">
+                        @csrf
                         <button type="submit" class="btn btn-danger">Eliminar</button>
                     </form>
                 </td>

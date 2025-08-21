@@ -32,6 +32,8 @@ class EquipoController extends Controller
     public function store(Request $request)
     {
         //
+        Equipo::create($request->all());
+        return redirect()->route('equipos.index');
     }
 
     /**
@@ -45,24 +47,31 @@ class EquipoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Equipo $equipo)
+    public function edit($id)
     {
         //
+        $equipo = Equipo::findOrFail($id);
+        return view('equipos.edit', compact('equipo'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Equipo $equipo)
+    public function update(Request $request, $id)
     {
         //
+        $equipo = Equipo::findOrFail($id);
+        $equipo->update($request->all());
+        return redirect()->route('equipos.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Equipo $equipo)
+    public function destroy($id)
     {
-        //
+       $equipo = Equipo::findOrFail($id);
+       $equipo->delete();
+       return redirect()->route('equipos.index');
     }
 }
