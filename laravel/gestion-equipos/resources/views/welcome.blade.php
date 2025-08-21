@@ -14,7 +14,7 @@
         <div class="card-body">
             <h5 class="card-title">Gestion de Equipos</h5>
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Ir a gestionar equipos</a>
+            <a href="{{route('equipos.index')}}" class="btn btn-primary">Ir a gestionar equipos</a>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>

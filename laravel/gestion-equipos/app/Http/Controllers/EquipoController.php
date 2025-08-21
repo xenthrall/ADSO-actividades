@@ -13,6 +13,8 @@ class EquipoController extends Controller
     public function index()
     {
         //
+        $equipos = Equipo::all();
+        return view('equipos.index', compact('equipos'));
     }
 
     /**
@@ -21,6 +23,7 @@ class EquipoController extends Controller
     public function create()
     {
         //
+        return view('equipos.create');
     }
 
     /**
