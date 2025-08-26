@@ -5,19 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-    <title>Document</title>
+    <title>Panel Principal</title>
 </head>
 
-<body>
+<body class="bg-light">
 
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">Gestion de Equipos</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="{{route('equipos.index')}}" class="btn btn-primary">Ir a gestionar equipos</a>
+    <div class="container text-center mt-5">
+        <!-- Título centrado -->
+        <h1 class="mb-5 fw-bold text-primary">Sistema</h1>
+
+        <!-- Contenedor de tarjetas -->
+        <div class="row justify-content-center g-4">
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0 h-100">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <h5 class="card-title mb-4">Gestión de Equipos</h5>
+                        <a href="{{ route('equipos.index') }}" class="btn btn-primary">Ir a gestionar equipos</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0 h-100">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <h5 class="card-title mb-4">Gestión de Jugadores</h5>
+                        <a href="{{ route('jugadores.index') }}" class="btn btn-primary">Ir a gestionar jugadores</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
-
 </html>

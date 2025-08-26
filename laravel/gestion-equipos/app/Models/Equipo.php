@@ -15,4 +15,10 @@ class Equipo extends Model
         'fundacion',
         'liga',
     ];
+
+    // Relación: Un equipo tiene muchos jugadores
+    public function jugadores()
+    {
+        return $this->hasMany(Jugador::class);
+    }
 }

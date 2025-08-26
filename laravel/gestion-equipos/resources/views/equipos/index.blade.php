@@ -8,10 +8,13 @@
     <title>listar equipos</title>
 </head>
 
-<body>
-    <a href="{{route('equipos.create')}}" class="btn btn-primary">Crear Nuevo Equipo</a>
-    <table class="table">
-        <thead>
+<body class="container mt-4">
+    <h1 class="mb-4">Gestión de Equipos</h1>
+    <a href="{{route('equipos.create')}}" class="btn btn-primary mb-3">Crear Nuevo Equipo</a>
+    <a href="{{ route('welcome') }}" class="btn btn-secondary mb-3">Regresar</a>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
@@ -19,8 +22,8 @@
                 <th>Pais</th>
                 <th>Fundacion</th>
                 <th>Liga</th>
-                <th>Acciones</th>
-                <th></th>
+                <th colspan="2" class="text-center">Acciones</th>
+
             </tr>
         </thead>
         <tbody>
@@ -32,14 +35,15 @@
                 <td>{{$equipo -> pais}}</td>
                 <td>{{$equipo -> fundacion}}</td>
                 <td>{{$equipo -> liga}}</td>
-                <td>
-                    <a href="{{route('equipos.edit', $equipo->id)}}" class="btn btn-success">Editar</a>
-                </td>
-                <td>
+
+                <td class="text-center">
                     <form action="{{route('equipos.destroy', $equipo->id)}}" method="post">
                         @csrf
                         <button type="submit" class="btn btn-danger">Eliminar</button>
                     </form>
+                </td>
+                <td class="text-center">
+                    <a href="{{route('equipos.edit', $equipo->id)}}" class="btn btn-success">Editar</a>
                 </td>
             </tr>
             @endforeach
