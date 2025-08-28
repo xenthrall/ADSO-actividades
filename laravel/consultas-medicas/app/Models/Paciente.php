@@ -21,4 +21,12 @@ class Paciente extends Model
         'direccion',
         'estado',
     ];
+
+    /**
+     * Relación: Un paciente puede tener muchas consultas médicas
+     */
+    public function consultas()
+    {
+        return $this->hasMany(ConsultasMedica::class, 'id_paciente');
+    }
 }

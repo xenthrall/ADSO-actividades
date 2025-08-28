@@ -31,6 +31,8 @@ class PacienteController extends Controller
     public function store(Request $request)
     {
         //
+        Paciente::create($request->all());
+        return redirect()->back()->with('success', 'Paciente ' . $request->nombre . ' creado exitosamente.');
     }
 
     /**
@@ -52,16 +54,23 @@ class PacienteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Paciente $paciente)
+    public function update(Request $request, $id)
     {
         //
+        $paciente = Paciente::findorfail($id);
+        $paciente->update($request->all());
+
+        return redirect()->back()->with('success', 'Paciente ' . $paciente->nombre . ' actualizado exitosamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Paciente $paciente)
+    public function destroy($id)
     {
         //
+        $paciente = Paciente::FindOrFail($id);
+        $paciente->delete();
+        return redirect()->back()->with('success', 'Paciente ' . $paciente->nombre . ' eliminado exitosamente.');
     }
 }
