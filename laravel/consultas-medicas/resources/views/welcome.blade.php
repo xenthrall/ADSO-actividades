@@ -25,6 +25,15 @@
                 </div>
             </div>
 
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0 h-100">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <h5 class="card-title mb-4">Gestión de Consultas</h5>
+                        <a href="{{ route('consultas_medicas.index') }}" class="btn btn-primary">Ir a gestionar consultas</a>
+                    </div>
+                </div>
+            </div>
+
            
         </div>
     </div>
