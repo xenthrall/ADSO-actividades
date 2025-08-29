@@ -12,7 +12,7 @@
 
     <div class="container text-center mt-5">
         <!-- Título centrado -->
-        <h1 class="mb-5 fw-bold text-primary">Sistema</h1>
+        <h1 class="mb-5 fw-bold text-secondary">Consultas Medicas</h1>
 
         <!-- Contenedor de tarjetas -->
         <div class="row justify-content-center g-4">
@@ -20,7 +20,7 @@
                 <div class="card shadow-lg border-0 h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h5 class="card-title mb-4">Gestión de Pacientes</h5>
-                        <a href="{{ route('pacientes.index') }}" class="btn btn-primary">Ir a gestionar pacientes</a>
+                        <a href="{{ route('pacientes.index') }}" class="btn btn-outline-primary">Ir a gestionar pacientes</a>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                 <div class="card shadow-lg border-0 h-100">
                     <div class="card-body d-flex flex-column justify-content-center">
                         <h5 class="card-title mb-4">Gestión de Consultas</h5>
-                        <a href="{{ route('consultas_medicas.index') }}" class="btn btn-primary">Ir a gestionar consultas</a>
+                        <a href="{{ route('consultas_medicas.index') }}" class="btn btn-outline-primary">Ir a gestionar consultas</a>
                     </div>
                 </div>
             </div>
