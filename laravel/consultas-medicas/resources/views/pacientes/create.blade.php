@@ -15,7 +15,7 @@
           <!-- Tipo Documento -->
           <div class="col-md-6">
             <label for="tipoDocumento" class="form-label">Tipo de Documento</label>
-            <select name="tipoDocumento" class="form-control" required>
+            <select name="tipoDocumento" class="form-control" >
               <option value="">Seleccione...</option>
               <option value="CC">Cédula de Ciudadanía</option>
               <option value="TI">Tarjeta de Identidad</option>
@@ -27,31 +27,31 @@
           <!-- Documento -->
           <div class="col-md-6">
             <label for="dni" class="form-label">Número de Documento</label>
-            <input type="text" class="form-control" name="dni" required>
+            <input type="text" class="form-control" name="dni" >
           </div>
 
           <!-- Nombre -->
           <div class="col-md-6">
             <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" class="form-control" name="nombre" required>
+            <input type="text" class="form-control" name="nombre" >
           </div>
 
           <!-- Apellido -->
           <div class="col-md-6">
             <label for="apellido" class="form-label">Apellido</label>
-            <input type="text" class="form-control" name="apellido" required>
+            <input type="text" class="form-control" name="apellido" >
           </div>
 
           <!-- Fecha Nacimiento -->
           <div class="col-md-6">
             <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
-            <input type="date" class="form-control" name="fechaNacimiento" required>
+            <input type="date" class="form-control" name="fechaNacimiento" >
           </div>
 
           <!-- Género -->
           <div class="col-md-6">
             <label for="genero" class="form-label">Género</label>
-            <select name="genero" class="form-control" required>
+            <select name="genero" class="form-control" >
               <option value="">Seleccione...</option>
               <option value="M">Masculino</option>
               <option value="F">Femenino</option>
@@ -80,7 +80,7 @@
           <!-- Estado -->
           <div class="col-md-6">
             <label for="estado" class="form-label">Estado</label>
-            <select name="estado" class="form-control" required>
+            <select name="estado" class="form-control">
               <option value="Activo">Activo</option>
               <option value="Inactivo">Inactivo</option>
             </select>

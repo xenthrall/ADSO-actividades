@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PacienteRequest;
 use App\Models\Paciente;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,7 @@ class PacienteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PacienteRequest $request)
     {
         //
         Paciente::create($request->all());
