@@ -1,0 +1,28 @@
+# === Django ===
+*.log
+db.sqlite3
+db.sqlite3-journal
+
+# Migraciones (opcional, si trabajas solo)
+*/migrations/__pycache__/
+*/migrations/*.py
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# === Entornos virtuales ===
+venv/
+.env/
+.venv/
+
+# === Archivos temporales ===
+*.bak
+*.swp
+*.tmp
+
+# === Archivos de IDEs ===
+.vscode/
+.idea/
