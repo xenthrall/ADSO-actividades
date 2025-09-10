@@ -53,7 +53,7 @@
 
     <footer>
         <div class="text-center p-3" style="background-color: #f8f9fa;">
-            &copy; Autor: Fredy Andrey Medina Caicedo. Todos los derechos reservados.
+            &copy; Lo importante es la salud
         </div>
     </footer>
 
