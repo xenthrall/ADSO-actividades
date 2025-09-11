@@ -21,6 +21,7 @@
 
                 <flux:navlist.item icon="film" :href="route('contenidos.index')" :current="request()->routeIs('contenidos.index')" wire:navigate>Contenidos</flux:navlist.item>
 
+                <flux:navlist.item icon="eye" :href="route('visualizaciones.index')" :current="request()->routeIs('visualizaciones.index')" wire:navigate>Visualizaciones</flux:navlist.item>
 
                 
 

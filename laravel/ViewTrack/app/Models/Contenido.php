@@ -24,4 +24,12 @@ class Contenido extends Model
     {
         return $this->belongsTo(Clasificacion::class, 'clasificacion_id');
     }
+
+    /**
+     * Relación con Visualizacion (uno a muchos).
+     */
+    public function visualizaciones()
+    {
+        return $this->hasMany(Visualizacion::class, 'contenido_id');
+    }
 }

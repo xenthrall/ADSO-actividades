@@ -58,4 +58,12 @@ class User extends Authenticatable
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
+
+    /**
+     * Relación con visualizaciones (uno a muchos).
+     */
+    public function visualizaciones()
+    {
+        return $this->hasMany(Visualizacion::class, 'usuario_id');
+    }
 }

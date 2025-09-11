@@ -27,7 +27,7 @@ class Index extends Component
     public function render()
     {
         return view('livewire.clasificaciones.index', [
-            'clasificaciones' => Clasificacion::latest()->paginate(10)
+            'clasificaciones' => Clasificacion::paginate(10)
 
             //'clasificaciones' => Clasificacion::latest()->paginate(10)
             //'clasificaciones' => Clasificacion::simplePaginate(10)

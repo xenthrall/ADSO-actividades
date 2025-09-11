@@ -2,6 +2,7 @@
 
 use App\Livewire\Clasificaciones\Index as ClasificacionesIndex;
 use App\Livewire\Contenidos\Index as ContenidosIndex;
+use App\Livewire\Visualizaciones\Index as VisualizacionesIndex;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -26,6 +27,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/clasificaciones', ClasificacionesIndex::class)->name('clasificaciones.index');
 Route::get('/contenidos', ContenidosIndex::class)->name('contenidos.index');
+
+Route::get('/visualizaciones', VisualizacionesIndex::class)->name('visualizaciones.index');
 
 
 require __DIR__.'/auth.php';

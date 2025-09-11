@@ -19,4 +19,5 @@ class Clasificacion extends Model
     {
         return $this->hasMany(Contenido::class, 'clasificacion_id');
     }
+    
 }
