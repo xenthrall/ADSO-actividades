@@ -3,9 +3,7 @@
 namespace App\Livewire\Clasificaciones;
 
 
-use Livewire\Attributes\Validate;
 use App\Livewire\Forms\ClasificacionForm;
-use App\Models\Clasificacion;
 use Livewire\Component;
 
 class Create extends Component

@@ -1,13 +1,12 @@
-
 <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
     <!-- Botón + Modal (separado en componente) -->
-    @livewire('clasificaciones.create')
+    @livewire('contenidos.create')
 
     <!-- success Alert -->
     @if (session('success'))
         @php
             $success = session('success');
-            $nombre = $success['nombre'] ?? '';
+            $titulo = $success['titulo'] ?? '';
             $action = $success['action'] ?? '';
         @endphp
 
@@ -28,16 +27,16 @@
                     </svg>
                 </div>
                 <div class="ml-2">
-                    <h3 class="text-sm font-semibold text-success">Clasificación</h3>
+                    <h3 class="text-sm font-semibold text-success">Contenido</h3>
                     <p class="text-xs font-medium sm:text-sm">
-                        Clasificación
-                        <span class="font-bold text-green-700 px-2 py-0.5 rounded">{{ $nombre }}</span>
+                        Contenido
+                        <span class="font-bold text-green-700 px-2 py-0.5 rounded">{{ $titulo }}</span>
                         @if ($action === 'created')
-                            creada exitosamente
+                            creado exitosamente
                         @elseif ($action === 'updated')
-                            actualizada exitosamente
+                            actualizado exitosamente
                         @elseif ($action === 'deleted')
-                            eliminada exitosamente
+                            eliminado exitosamente
                         @endif
                     </p>
                 </div>
@@ -52,40 +51,41 @@
         </div>
     @endif
 
-
-    
-
-
     <!-- Tabla -->
     <div class="overflow-hidden w-full overflow-x-auto rounded-lg border border-neutral-300 dark:border-neutral-700">
-    
-    
-
         <table class="w-full text-left text-sm text-neutral-600 dark:text-neutral-300">
             <thead class="border-b border-neutral-300 bg-neutral-50 text-sm text-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white">
                 <tr>
                     <th scope="col" class="p-4">ID</th>
-                    <th scope="col" class="p-4">Clasificacion</th>
-                    <th scope="col" class="p-4">Descripcion</th>
+                    <th scope="col" class="p-4">Título</th>
+                    <th scope="col" class="p-4">Tipo</th>
+                    <th scope="col" class="p-4">Género</th>
+                    <th scope="col" class="p-4">Fecha</th>
+                    <th scope="col" class="p-2">Duración (minutos)</th>
+                    <th scope="col" class="p-4">Clasificación</th>
                     <th scope="col" class="p-4 text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-neutral-300 dark:divide-neutral-700">
-                @forelse ($clasificaciones as $Clasificacion)
+                @forelse ($contenidos as $contenido)
                     <tr class="hover:bg-neutral-100 dark:hover:bg-neutral-800">
-                        <td class="p-4">{{ $Clasificacion->id }}</td>
-                        <td class="p-4">{{ $Clasificacion->nombre }}</td>
-                        <td class="p-4">{{ $Clasificacion->descripcion }}</td>
+                        <td class="p-4">{{ $contenido->id }}</td>
+                        <td class="p-4">{{ $contenido->titulo }}</td>
+                        <td class="p-4">{{ $contenido->tipo }}</td>
+                        <td class="p-4">{{ $contenido->genero }}</td>
+                        <td class="p-4">{{ $contenido->anio_lanzamiento }}</td>
+                        <td class="p-2">{{ $contenido->duracion_minutos }} min</td>
+                        <td class="p-4">{{ $contenido->clasificacion->nombre }}</td>
                         <td class="p-4 flex justify-center">
                             <div class="flex flex-col sm:flex-row gap-2">
                                 <!-- Botón Update -->
-                                <livewire:clasificaciones.edit :clasificacion="$Clasificacion" />
+                                <livewire:contenidos.edit :contenido="$contenido" />
 
                                 <!-- Botón Delete -->
                                 <button
-                                    wire:confirm="¿Estás seguro que deseas eliminar esta clasificación?"
+                                    wire:confirm="¿Estás seguro que deseas eliminar este contenido?"
                                     type="button"
-                                    wire:click='delete({{ $Clasificacion}})'
+                                    wire:click='delete({{ $contenido }})'
                                     class="inline-flex items-center gap-2 rounded-lg 
                                             bg-red-600 px-3 py-1.5 text-xs font-medium tracking-wide 
                                             text-white shadow-sm transition hover:bg-red-700 
@@ -103,20 +103,17 @@
                                 
                             </div>
                         </td>
-
                     </tr>
-                    
                 @empty
                     <tr>
-                        <td colspan="4" class="p-4 text-center">No hay clasificaciones disponibles.</td>
+                        <td colspan="5" class="p-4 text-center">No hay contenidos disponibles.</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
 
         <div class="p-4">
-            {{ $clasificaciones->links() }}
+            {{ $contenidos->links() }}
         </div>
     </div>
-
 </div>

@@ -9,8 +9,8 @@ use Livewire\Form;
 class ClasificacionForm extends Form
 {
     //
+    //#[Validate('unique:clasificaciones', message: 'El nombre de la clasificación ya existe')]
     #[Validate('required', message: 'Por favor ingrese nombre de la clasificación')]
-    #[Validate('unique:clasificaciones', message: 'El nombre de la clasificación ya existe')]
     #[Validate('max:25', message: 'El nombre no debe exceder los 25 caracteres')]
     public $nombre;
 

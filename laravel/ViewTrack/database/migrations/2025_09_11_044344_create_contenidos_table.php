@@ -12,8 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('contenidos', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); // id INT auto increment
+
+            $table->string('titulo', 200);
+            $table->enum('tipo', ['pelicula', 'serie', 'documental']);
+            $table->string('genero', 100)->nullable();
+            $table->year('anio_lanzamiento')->nullable();
+            $table->integer('duracion_minutos')->nullable();
+
+            // Relación con clasificaciones
+            $table->foreignId('clasificacion_id')
+                  ->constrained('clasificaciones')
+                  ->onDelete('cascade');
+
+            $table->timestamps(); // created_at y updated_at
         });
     }
 
@@ -25,3 +37,4 @@ return new class extends Migration
         Schema::dropIfExists('contenidos');
     }
 };
+

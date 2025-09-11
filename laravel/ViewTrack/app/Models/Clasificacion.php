@@ -11,4 +11,12 @@ class Clasificacion extends Model
     protected $fillable = [
         'nombre', 
         'descripcion'];
+
+    /**
+     * Relación con Contenido (uno a muchos).
+     */
+    public function contenidos()
+    {
+        return $this->hasMany(Contenido::class, 'clasificacion_id');
+    }
 }
