@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clasificacions', function (Blueprint $table) {
-            $table->id(); // id INT auto increment
-            $table->string('clasificacion', 50);
-            $table->string('descripcion', 50)->nullable();
-            $table->timestamps(); // created_at y updated_at
+        Schema::create('contenidos', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
         });
     }
 
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clasificacions');
+        Schema::dropIfExists('contenidos');
     }
 };

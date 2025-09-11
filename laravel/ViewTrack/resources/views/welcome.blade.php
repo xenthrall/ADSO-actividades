@@ -26,7 +26,7 @@
     <div class="relative flex-grow flex flex-col items-center justify-center">
         <header class="w-full max-w-7xl mx-auto px-6 lg:px-8 py-8 absolute top-0">
             <div class="flex items-center justify-between">
-                <a href="/" class="flex items-center space-x-2 group">
+                <a href="{{ url('/dashboard') }}" class="flex items-center space-x-2 group">
                     <svg class="h-8 w-auto text-blue-500 group-hover:text-blue-400 transition-colors duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" />

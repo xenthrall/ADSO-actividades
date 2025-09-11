@@ -1,5 +1,7 @@
 <?php
 
+use App\Livewire\Clasificaciones\Index;
+
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -19,4 +21,11 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 
+
+//Rutas clasificaciones
+Route::get('/clasificaciones', Index::class)->name('clasificaciones.index');
+
+
 require __DIR__.'/auth.php';
+
+

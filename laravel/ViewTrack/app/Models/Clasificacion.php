@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Clasificacion extends Model
 {
     //
-    protected $table = 'clasificacions';
+    protected $table = 'clasificaciones';
     protected $fillable = [
-        'clasificacion', 
+        'nombre', 
         'descripcion'];
 }
