@@ -8,6 +8,11 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
+use Filament\Tables\Columns\IconColumn;
+
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Builder;
+
 class CompetenciasTable
 {
     public static function configure(Table $table): Table
@@ -21,9 +26,10 @@ class CompetenciasTable
                 TextColumn::make('descripcion_norma')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('tipoCompetencia.id')
+                TextColumn::make('tipoCompetencia.nombre')
                     ->label('Tipo de Competencia')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('duracion_horas')
                     ->numeric()
                     ->searchable()
@@ -32,8 +38,9 @@ class CompetenciasTable
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('estado')
-                    ->searchable()
+                IconColumn::make('estado')
+                    ->boolean()
+                    ->label('Activo')
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -46,6 +53,9 @@ class CompetenciasTable
             ])
             ->filters([
                 //
+                Filter::make('estado')
+                    ->query(fn(Builder $query) => $query->where('estado', false))
+                    ->label('Inactivos'),
             ])
             ->recordActions([
                 EditAction::make(),

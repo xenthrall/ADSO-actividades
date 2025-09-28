@@ -19,6 +19,13 @@ class Competencia extends Model
         'estado',
     ];
 
+    /*
+    // Aquí le decimos a Eloquent que "estado" es booleano
+    protected $casts = [
+        'estado' => 'boolean',
+    ];
+    */
+
     public function tipoCompetencia()
     {
         return $this->belongsTo(TipoCompetencia::class);
