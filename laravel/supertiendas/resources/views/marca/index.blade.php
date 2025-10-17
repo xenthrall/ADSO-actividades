@@ -1,0 +1,107 @@
+@extends('adminlte::page')
+
+@section('title','Gestión-marcas')
+
+@section('content_header')
+<h1 class="display-6">Gestion de marcas</h1>
+@stop
+
+@section('content')
+<div class="row">
+    <div class="col-md-10 offset-1">
+        <a data-bs-toggle="tooltip" title="Crear nueva marca" href="{{ route('marca.create') }}" class="btn btn-outline-primary mt-3"><i class="fas fa-plus fa-lg"></i>Nueva</a>
+        <a data-bs-toggle="tooltip" title="Volver" href="{{ route('index') }}" class="btn btn-outline-secondary mt-3"><i class="fas fa-arrow-left fa-lg"></i>Volver</a>
+        <div class="card card-primary mt-4">
+            <div class="card-header">
+                <h6 class="card-title">Marcas</h6>
+            </div>
+            <div class="card-body">
+                <table class="table" id="myTable">
+                    <thead>
+                        <tr>
+                            <td>ID</td>
+                            <td>Nombre</td>
+                            <td>Descripción</td>
+                            <td>Opciones</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($marcas as $marca)
+                        <tr>
+                            <td>{{ $marca->id }}</td>
+                            <td>{{ $marca->nombre }}</td>
+                            <td>{{ $marca->descripcion }}</td>
+                            <td>
+                                <a data-bs-toggle="tooltip" title="Editar" href="{{ route('marca.edit',$marca->id) }}" 
+                                    class="btn btn-outline-warning"><i class="fas fa-pencil-alt fa-lg"></i>Editar</a>
+                                <form action="{{ route('marca.destroy',$marca->id) }}" method="post" class="d-inline">
+                                    @csrf
+                                    <button data-bs-toggle="tooltip" title="Volver" type="submit" class="btn btn-outline-danger" onclick="confirmarEliminacion(event)"><i class="fas fa-trash-alt fa-lg"></i>Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+@if(session('success'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: '{{ session("success") }}',
+            confirmButtonText: 'Aceptar',
+            timer: 3000
+        });
+    });
+</script>
+@endif
+@stop
+
+@section('css')
+
+@stop
+
+@section('js')
+<script>
+    function confirmarEliminacion(event) {
+        event.preventDefault();
+        const form = event.target.closest('form');
+
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    }
+
+
+
+    $(document).ready(function() {
+        $('#myTable').DataTable({
+            // Opciones personalizadas, si las necesitas
+            responsive: true,
+            autoWidth: false,
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json'
+            }
+        });
+    });
+</script>
+@stop
