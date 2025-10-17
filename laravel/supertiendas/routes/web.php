@@ -144,3 +144,7 @@ route::get('dash/ventas',[DashController::class,'ventas'])->name('dash.ventas');
 route::get('dash/clientes',[DashController::class,'clientes'])->name('dash.clientes');
 route::get('dash/inventario',[DashController::class,'inventario'])->name('dash.inventario');
 route::get('dash/financieros',[DashController::class,'financieros'])->name('dash.financieros');
+
+//pdf producto
+route::get('producto/pdf',[ProductoController::class,'verpdfproducto'])->name('producto.pdf');
+route::get('producto/generarpdf',[ProductoController::class,'generarpdfproducto'])->name('producto.generarpdf');

@@ -23,6 +23,18 @@
         <div class="card card-primary mt-3">
             <div class="card-header text-center">
                 <h1 class="card-title">Productos</h1>
+
+                <div>
+                    <a href="{{ route('producto.generarpdf') }}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-file-pdf"></i>DESCARGAR PDF
+                    </a>
+
+
+
+                    <a href="{{ route('producto.pdf') }}" class="btn btn-info btn-sm" target="_blank">
+                        <i class="fas fa-eye"></i> Ver PDF
+                    </a>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table" id="myTable">

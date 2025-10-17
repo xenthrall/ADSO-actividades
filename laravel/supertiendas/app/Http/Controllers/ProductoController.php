@@ -10,6 +10,7 @@ use App\Models\categoria;
 use App\Models\estado;
 use App\Models\marca;
 use Illuminate\Http\Request;
+use Dompdf\Dompdf;
 
 class ProductoController extends Controller
 {
@@ -79,5 +80,40 @@ class ProductoController extends Controller
         $producto = producto::find($id);
         $producto->delete();
         return redirect()->route('producto.index')->with('success','Producto eliminado exitosamente.');
+    }
+
+    public function verpdfproducto(){
+
+        $productos = Producto::with(['categoria', 'marca'])
+            ->orderBy('idcategoria')
+            ->orderBy('nombre')
+            ->get();
+
+        return view('pdf.productopdf', compact('productos'));
+
+    }
+
+    public function generarpdfproducto(){
+
+        $productos = Producto::with(['categoria', 'marca'])
+            ->orderBy('idcategoria')
+            ->orderBy('nombre')
+            ->get();
+
+        // Crear una instancia de Dompdf
+        $dompdf = new Dompdf();
+
+        // Cargar la vista Blade y pasar los datos
+        $html = view('pdf.productopdf', compact('productos'))->render();
+        $dompdf->loadHtml($html);
+
+        //Configurar el tamaño del papel y la orientación
+        $dompdf->setPaper('A4', 'landscape');
+
+        // Renderizar el PDF
+        $dompdf->render();
+
+        // Descargar el PDF generado
+        return $dompdf->stream('productos.pdf');
     }
 }
