@@ -10,20 +10,22 @@ class detallefactura extends Model
 
     use HasFactory;
 
-    protected $fillable = ['idfactura','idproducto','cantidad','preciounitario','totallinea'];
+    protected $fillable = ['idfactura', 'idproducto', 'cantidad', 'preciounitario', 'totallinea'];
 
     protected $casts = [
-    'cantidad' => 'integer',
-    'preciounitario' => 'decimal:2',
-    'totallinea' => 'decimal:2',
-];
+        'cantidad' => 'integer',
+        'preciounitario' => 'decimal:2',
+        'totallinea' => 'decimal:2',
+    ];
 
 
-    public function producto(){
-        return $this->belongsTo(producto::class,'idproducto');
+    public function producto()
+    {
+        return $this->belongsTo(producto::class, 'idproducto');
     }
 
-    public function factura(){
-        return $this->belongsTo(factura::class,'idfactura');
+    public function factura()
+    {
+        return $this->belongsTo(factura::class, 'idfactura');
     }
 }
