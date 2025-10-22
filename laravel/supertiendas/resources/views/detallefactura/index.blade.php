@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'destalleFactura')
+@section('title', 'detalleFactura')
 
 @section('content_header')
     <div class="row">
@@ -137,11 +137,24 @@
     <div class="row">
         <div class="col-md-12 mt-3">
             <div class="card card-prymary mt-3">
-                <div class="card-header">
+                <div class="card-header text-center">
                     <h1 class="card-title">detalle facturas</h1>
+<div>
+                        <a href="{{ route('detalle.generarpdf') }}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-file-pdf"></i>DESCARGAR PDF
+                        </a>
+
+
+
+                        <a href="{{ route('detalle.pdf') }}" class="btn btn-info btn-sm" target="_blank">
+                            <i class="fas fa-eye"></i> Ver PDF
+                        </a>
+                    </div>
+
+
                 </div>
                 <div class="card-body">
-                    <table class="table">
+                    <table class="table" id="myTable">
                         <thead>
                             <tr>
                                 <th>ID Detalle</th>

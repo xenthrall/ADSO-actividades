@@ -148,3 +148,8 @@ route::get('dash/financieros',[DashController::class,'financieros'])->name('dash
 //pdf producto
 route::get('producto/pdf',[ProductoController::class,'verpdfproducto'])->name('producto.pdf');
 route::get('producto/generarpdf',[ProductoController::class,'generarpdfproducto'])->name('producto.generarpdf');
+
+
+//pdf detallefactura
+route::get('detalle/pdf',[DetallefacturaController::class,'verpdfdetalle'])->name('detalle.pdf');
+route::get('detalle/generarpdf',[DetallefacturaController::class,'generarpdfdetalle'])->name('detalle.generarpdf');

@@ -8,6 +8,7 @@ use App\Http\Requests\StoreDetalleRequest;
 use App\Http\Requests\UpdateDetalleRequest;
 use App\Models\factura;
 use App\Models\producto;
+use Dompdf\Dompdf;
 use Illuminate\Http\Request;
 
 class DetallefacturaController extends Controller
@@ -138,5 +139,28 @@ class DetallefacturaController extends Controller
         $detallefactura = detallefactura::find($id);
         $detallefactura->delete();
         return redirect()->route('detalle.index')->with('success', 'Detalle de factura eliminado exitosamente.');
+    }
+
+    public function verpdfdetalle()
+    {
+        $detallesFactura = detallefactura::with(['factura', 'producto'])->orderBy('id', 'desc')->get();
+        return view('pdf.detallefacturapdf', compact('detallesFactura'));
+    }
+
+    public function generarpdfdetalle()
+    {
+        $detallesFactura = detallefactura::with(['factura', 'producto'])->orderBy('id', 'desc')->get();
+        
+        
+        $dompdf = new Dompdf();
+
+        $html = view('pdf.detallefacturapdf', compact('detallesFactura'))->render();
+        $dompdf->loadHtml($html);
+
+        $dompdf->setPaper('A4', 'landscape');
+
+        $dompdf->render();
+
+        return $dompdf->stream('detallefactura.pdf');
     }
 }
