@@ -10,13 +10,15 @@ use App\Models\factura;
 use App\Models\producto;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class DetallefacturaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+  public function index(Request $request)
     {
         // --- 1. OBTENER PARÁMETROS DE FILTRO ---
         $fecha_inicio = $request->get('fecha_inicio');
@@ -27,9 +29,10 @@ class DetallefacturaController extends Controller
         $total_min = $request->get('total_min');
         $total_max = $request->get('total_max');
 
+        // --- 2. CONSULTA PRINCIPAL (TABLA) ---
         $query = Detallefactura::with(['factura', 'producto']);
 
-        // Filtro por Rango de Fechas (sobre el campo 'fecha' de la tabla 'facturas')
+        // Filtro por Rango de Fechas
         if ($fecha_inicio && $fecha_fin) {
             $query->whereHas('factura', function ($q) use ($fecha_inicio, $fecha_fin) {
                 $q->whereBetween('fecha', [$fecha_inicio, $fecha_fin]);
@@ -57,18 +60,70 @@ class DetallefacturaController extends Controller
             $query->where('totallinea', '<=', $total_max);
         }
 
-        // --- ORDENAR Y PAGINAR LOS RESULTADOS ---
+        // Ordenar y Paginar
         $query->orderBy('id', 'desc');
         $detallesFactura = $query->paginate(50);
 
-
-        // Obtener lista de productos para el filtro solo con produtos existentes en detalle facturas
+        // --- 3. OBTENER PRODUCTOS PARA FILTRO ---
         $productos = producto::select('productos.*')
             ->join('detallefacturas', 'productos.id', '=', 'detallefacturas.idproducto')
             ->distinct()
             ->orderBy('productos.nombre')
             ->get();
 
+        // --- 4. PREPARAR DATOS PARA GRÁFICOS ---
+        // (Aplicamos los mismos filtros a las consultas de gráficos)
+
+        // Gráfico 1: Top 5 Productos por Cantidad Vendida
+        $queryTopCantidad = detallefactura::select(
+                'productos.nombre',
+                DB::raw('SUM(detallefacturas.cantidad) as total_cantidad')
+            )
+            ->join('productos', 'detallefacturas.idproducto', '=', 'productos.id');
+
+        // Gráfico 2: Top 5 Productos por Ingresos (Total Línea)
+        $queryTopIngresos = detallefactura::select(
+                'productos.nombre',
+                DB::raw('SUM(detallefacturas.totallinea) as total_ingresos')
+            )
+            ->join('productos', 'detallefacturas.idproducto', '=', 'productos.id');
+        
+        // Aplicar filtros de fecha a ambos gráficos
+        if ($fecha_inicio && $fecha_fin) {
+            $queryTopCantidad->join('facturas', 'detallefacturas.idfactura', '=', 'facturas.id')
+                             ->whereBetween('facturas.fecha', [$fecha_inicio, $fecha_fin]);
+            
+            $queryTopIngresos->join('facturas', 'detallefacturas.idfactura', '=', 'facturas.id')
+                             ->whereBetween('facturas.fecha', [$fecha_inicio, $fecha_fin]);
+        }
+
+        // Aplicar filtro de producto a ambos gráficos
+        if ($producto_id) {
+            $queryTopCantidad->where('detallefacturas.idproducto', $producto_id);
+            $queryTopIngresos->where('detallefacturas.idproducto', $producto_id);
+        }
+
+        $topProductosCantidad = $queryTopCantidad
+            ->groupBy('productos.nombre')
+            ->orderByDesc('total_cantidad')
+            ->take(5)
+            ->get();
+        
+        $topProductosIngresos = $queryTopIngresos
+            ->groupBy('productos.nombre')
+            ->orderByDesc('total_ingresos')
+            ->take(5)
+            ->get();
+
+        // Preparar datos para Chart.js
+        $labelsTopCantidad = $topProductosCantidad->pluck('nombre');
+        $dataTopCantidad = $topProductosCantidad->pluck('total_cantidad');
+        
+        $labelsTopIngresos = $topProductosIngresos->pluck('nombre');
+        $dataTopIngresos = $topProductosIngresos->pluck('total_ingresos');
+
+
+        // --- 5. RETORNAR VISTA CON TODOS LOS DATOS ---
         return view('detallefactura.index', compact(
             'detallesFactura',
             'productos',
@@ -78,7 +133,12 @@ class DetallefacturaController extends Controller
             'cantidad_min',
             'cantidad_max',
             'total_min',
-            'total_max'
+            'total_max',
+            // Datos para gráficos
+            'labelsTopCantidad',
+            'dataTopCantidad',
+            'labelsTopIngresos',
+            'dataTopIngresos'
         ));
     }
 
