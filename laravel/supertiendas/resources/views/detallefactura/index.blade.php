@@ -18,7 +18,6 @@
 @endsection
 
 @section('content')
-
     <!-- Card de Filtros -->
     <div class="card card-secondary mb-4">
         <div class="card-header">
@@ -82,7 +81,7 @@
                         </div>
                     </div>
 
-                     <!-- Botones -->
+                    <!-- Botones -->
                     <div class="col-md-1">
                         <div class="form-group">
                             <label>&nbsp;</label>
@@ -96,7 +95,15 @@
                 </div>
 
                 <!-- Mostrar filtros aplicados -->
-                @if (request()->hasAny(['fecha_inicio', 'fecha_fin', 'producto_id', 'cantidad_min', 'cantidad_max', 'total_min', 'total_max']))
+                @if (request()->hasAny([
+                        'fecha_inicio',
+                        'fecha_fin',
+                        'producto_id',
+                        'cantidad_min',
+                        'cantidad_max',
+                        'total_min',
+                        'total_max',
+                    ]))
                     <div class="row">
                         <div class="col-md-12">
                             <div class="alert alert-info alert-dismissible fade show mb-0 mt-2" role="alert">
@@ -134,22 +141,37 @@
             </form>
         </div>
     </div>
+
+
     <div class="row">
         <div class="col-md-12 mt-3">
             <div class="card card-prymary mt-3">
                 <div class="card-header text-center">
                     <h1 class="card-title">detalle facturas</h1>
-<div>
-                        <a href="{{ route('detalle.generarpdf') }}" class="btn btn-danger btn-sm">
-                            <i class="fas fa-file-pdf"></i>DESCARGAR PDF
+                    <div class="d-flex justify-content-end gap-2">
+
+                        <!-- Descargar PDF -->
+                        <a href="{{ route('detalle.generarpdf') }}"
+                            class="btn btn-outline-danger btn-sm d-flex align-items-center">
+                            <i class="fas fa-file-pdf me-2"></i> Descargar PDF
                         </a>
 
-
-
-                        <a href="{{ route('detalle.pdf') }}" class="btn btn-info btn-sm" target="_blank">
-                            <i class="fas fa-eye"></i> Ver PDF
+                        <!-- Ver PDF -->
+                        <a href="{{ route('detalle.pdf') }}"
+                            class="btn btn-outline-info btn-sm d-flex align-items-center" target="_blank">
+                            <i class="fas fa-eye me-2"></i> Ver PDF
                         </a>
+                        @include('charts.datallefacturaschart')
+
+                        <!-- Botón de Gráficas -->
+                        <button type="button" class="btn btn-primary btn-sm d-flex align-items-center"
+                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            <i class="fas fa-chart-bar me-2"></i> Ver Gráficas
+                        </button>
+
                     </div>
+
+
 
 
                 </div>
@@ -199,10 +221,10 @@
                             @endforelse
                         </tbody>
                     </table>
-                   
+
 
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -227,6 +249,9 @@
 @stop
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
+    </script>
     <script>
         function confirmarEliminacion(event) {
             event.preventDefault();
