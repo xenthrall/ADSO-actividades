@@ -13,9 +13,13 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Hexters\HexaLite\HasHexaLite;
+
 
 class UserResource extends Resource
 {
+    use HasHexaLite;
+
     protected static ?string $model = User::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
@@ -46,5 +50,20 @@ class UserResource extends Resource
             'create' => CreateUser::route('/create'),
             'edit' => EditUser::route('/{record}/edit'),
         ];
+    }
+
+    public static function defineGates(): array
+    {
+        return [
+            'user.index'   => __('Permitir el acceso al listado de usuarios'),
+            'user.create'  => __('Permitir la creación de un nuevo usuario'),
+            'user.update'  => __('Permitir la actualización de usuarios'),
+            'user.delete'  => __('Permitir la eliminación de usuarios'),
+        ];
+    }
+
+    public static function canAccess(): bool
+    {
+        return hexa()->can('user.index');
     }
 }

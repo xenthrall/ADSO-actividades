@@ -6,7 +6,6 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
-use Illuminate\Support\Facades\Hash;
 
 class UserForm
 {
@@ -15,21 +14,22 @@ class UserForm
         return $schema
             ->components([
                 TextInput::make('name')
-                ->required()
-                ->maxLength(255),
-            TextInput::make('email')
-                ->email()
-                ->required()
-                ->unique(ignoreRecord: true),
-            TextInput::make('password')
-                ->password()
-                ->required(fn (string $context): bool => $context === 'create')
-                ->minLength(8)
-                ->maxLength(255),
-            Select::make('roles')
-                ->label(__('Role Name'))
-                ->relationship('roles', 'name')
-                ->placeholder(__('Superuser')),
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->unique(ignoreRecord: true),
+                TextInput::make('password')
+                    ->password()
+                    ->required(fn(string $context): bool => $context === 'create')
+                    ->minLength(8)
+                    ->maxLength(255),
+                Select::make('roles')
+                    ->multiple()
+                    ->label(__('Role Name'))
+                    ->relationship('roles', 'name')
+                    ->placeholder(__('Superuser')),
             ]);
     }
 }

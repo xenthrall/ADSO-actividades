@@ -22,6 +22,9 @@ class UsersTable
                 TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),
+                TextColumn::make('roles.name')
+                    ->label('Role'),
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -30,16 +33,19 @@ class UsersTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->visible(fn() => hexa()->can(['user.index', 'user.update'])),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->visible(fn() => hexa()->can(['user.index', 'user.delete'])),
                 ]),
             ]);
     }
