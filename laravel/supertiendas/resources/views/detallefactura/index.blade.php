@@ -27,6 +27,15 @@
             <form method="GET" action="{{ route('detalle.index') }}">
                 <div class="row">
 
+                    <!-- Búsqueda general -->
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="search">Buscar</label>
+                            <input type="text" class="form-control" id="search" name="search"
+                                value="{{ request('search') }}" placeholder="Nombre de producto...">
+                        </div>
+                    </div>
+
                     <!-- Filtro por Rango de Fechas -->
                     <div class="col-md-3">
                         <div class="form-group">
@@ -108,6 +117,9 @@
                         <div class="col-md-12">
                             <div class="alert alert-info alert-dismissible fade show mb-0 mt-2" role="alert">
                                 <strong>Filtros aplicados:</strong>
+                                @if (request('search'))
+                                    <span class="badge badge-light">Búsqueda: "{{ request('search') }}"</span>
+                                @endif
                                 @if (request('fecha_inicio'))
                                     <span class="badge badge-light">Fecha Inicio: {{ request('fecha_inicio') }}</span>
                                 @endif

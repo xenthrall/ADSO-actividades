@@ -21,6 +21,7 @@ class DetallefacturaController extends Controller
   public function index(Request $request)
     {
         // --- 1. OBTENER PARÁMETROS DE FILTRO ---
+        $search = $request->get('search');
         $fecha_inicio = $request->get('fecha_inicio');
         $fecha_fin = $request->get('fecha_fin');
         $producto_id = $request->get('producto_id');
@@ -36,6 +37,13 @@ class DetallefacturaController extends Controller
         if ($fecha_inicio && $fecha_fin) {
             $query->whereHas('factura', function ($q) use ($fecha_inicio, $fecha_fin) {
                 $q->whereBetween('fecha', [$fecha_inicio, $fecha_fin]);
+            });
+        }
+
+        //filtro por nombre de producto
+        if ($search) {
+            $query->whereHas('producto', function ($q) use ($search) {
+                $q->where('nombre', 'LIKE', "%{$search}%");
             });
         }
 
@@ -62,7 +70,7 @@ class DetallefacturaController extends Controller
 
         // Ordenar y Paginar
         $query->orderBy('id', 'desc');
-        $detallesFactura = $query->paginate(50);
+        $detallesFactura = $query->paginate(200);
 
         // --- 3. OBTENER PRODUCTOS PARA FILTRO ---
         $productos = producto::select('productos.*')
