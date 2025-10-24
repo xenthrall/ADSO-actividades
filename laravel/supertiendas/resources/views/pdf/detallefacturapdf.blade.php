@@ -2,121 +2,146 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte de Detalles de Facturas</title>
+    <title>Reporte Resumido de Detalles</title>
     <style>
-        body {
-            font-family: DejaVu Sans, sans-serif;
-            font-size: 12px;
-            margin: 20px;
+        /* Importante para que Dompdf muestre ñ, tildes y símbolos */
+        @page {
+            margin: 25px;
         }
-
-        h1, h3 {
+        body {
+            font-family: DejaVu Sans, sans-serif; 
+            font-size: 11px;
+            color: #333;
+        }
+        h1, h2, h3 {
             text-align: center;
             margin: 0;
+            line-height: 1.4;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
         }
-
         th, td {
-            border: 1px solid #999;
-            padding: 6px;
+            border: 1px solid #ccc;
+            padding: 5px;
             text-align: left;
         }
-
+        th {
+            background-color: #f0f0f0;
+            text-align: center;
+        }
         .text-center { text-align: center; }
         .text-right { text-align: right; }
 
-        .header {
-            text-align: center;
+        .header-table, .summary-table {
+            width: 100%;
+            border: none;
             margin-bottom: 20px;
+        }
+        .header-table td {
+            border: none;
+            vertical-align: top;
+            padding: 0;
+        }
+        .summary-table td {
+            border: 1px solid #eee;
+            padding: 8px;
+            font-size: 12px;
+        }
+        .summary-table .label {
+            font-weight: bold;
+            background-color: #f9f9f9;
+            width: 30%;
         }
 
         .logo {
             width: 80px;
-            margin-bottom: 10px;
         }
-
-        .summary {
-            margin-top: 20px;
+        
+        .filter-box {
+            border: 1px solid #aaa;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #fdfdfd;
         }
-
-        .badge {
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 10px;
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 9px;
+            color: #888;
+        }
+        .total-row {
+            background-color: #f5f5f5;
             font-weight: bold;
         }
-
-        .badge-success { background-color: #28a745; color: white; }
-        .badge-warning { background-color: #ffc107; color: black; }
-        .badge-danger  { background-color: #dc3545; color: white; }
-        .badge-secondary { background-color: #6c757d; color: white; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div style="display: flex; align-items: center; justify-content: center;">
-            <img src="https://caprendizaje.sena.edu.co/sgva/Images/logoSena1.png"
-                 alt="Logo"
-                 style="height: 100px; width: 100px; margin-right: 10px;">
-            <h1 style="margin: 0; font-size: 24px;">SISTEMA CATA</h1>
-        </div>
-        <p><strong>NIT:</strong> 900123456-7</p>
-        <h2>Reporte de Detalles de Facturas</h2>
-        <p><strong>Fecha de generación:</strong> {{ \Carbon\Carbon::now()->format('d/m/Y H:i') }}</p>
+    <table class="header-table">
+        <tr>
+            <td style="width: 20%; text-align: left;">
+                <img src="https://caprendizaje.sena.edu.co/sgva/Images/logoSena1.png" alt="Logo" class="logo">
+            </td>
+            <td style="width: 60%; text-align: center;">
+                <h1 style="font-size: 20px;">SISTEMA CATA</h1>
+                <h2 style="font-size: 16px;">Reporte Resumido de Detalles de Factura</h2>
+                <p style="font-size: 10px; margin:0;"><strong>NIT:</strong> 900123456-7</p>
+            </td>
+            <td style="width: 20%; text-align: right; font-size: 10px;">
+                <strong>Generado:</strong><br>
+                {{ \Carbon\Carbon::now()->format('d/m/Y H:i A') }}
+            </td>
+        </tr>
+    </table>
+
+    <div class="filter-box">
+        <h3 style="text-align: left; font-size: 13px; margin-bottom: 8px;">Filtros Aplicados</h3>
+        <table style="border: none; margin-top: 0; font-size: 11px;">
+            <tr style="border: none;">
+                <td style="border: none; padding: 2px;"><strong>Rango de Fechas:</strong></td>
+                <td style="border: none; padding: 2px;">
+                    @if ($fecha_inicio && $fecha_fin)
+                        Del {{ \Carbon\Carbon::parse($fecha_inicio)->format('d/m/Y') }} al {{ \Carbon\Carbon::parse($fecha_fin)->format('d/m/Y') }}
+                    @else
+                        Todos los registros
+                    @endif
+                </td>
+            </tr>
+            <tr style="border: none;">
+                <td style="border: none; padding: 2px;"><strong>Producto:</strong></td>
+                <td style="border: none; padding: 2px;">
+                    {{ $producto->nombre ?? 'Todos los productos' }}
+                </td>
+            </tr>
+        </table>
     </div>
 
-    <!-- 🔹 Resumen General -->
-    <table style="width: 100%; border: none; margin-bottom: 20px;">
+    <h3>Resumen General</h3>
+    <table class="summary-table">
         <tr>
-            <td style="border: none;"><strong>Total Registros:</strong> {{ $detallesFactura->count() }}</td>
-            <td style="border: none;"><strong>Total Facturas:</strong> {{ $detallesFactura->pluck('idfactura')->unique()->count() }}</td>
-            <td style="border: none;"><strong>Total Productos Vendidos:</strong> {{ number_format($detallesFactura->sum('cantidad')) }}</td>
+            <td class="label">Total Facturas Únicas</td>
+            <td>{{ number_format($resumenGeneral->total_facturas, 0, ',', '.') }}</td>
+            <td class="label">Total Líneas de Detalle</td>
+            <td>{{ number_format($resumenGeneral->total_lineas, 0, ',', '.') }}</td>
         </tr>
         <tr>
-            <td style="border: none;"><strong>Valor Total Facturado:</strong> ${{ number_format($detallesFactura->sum('totallinea'), 0, ',', '.') }}</td>
-            <td style="border: none;"><strong>Promedio por Factura:</strong> ${{ number_format($detallesFactura->groupBy('idfactura')->map->sum('totallinea')->avg(), 0, ',', '.') }}</td>
-            <td style="border: none;"><strong>Promedio por Línea:</strong> ${{ number_format($detallesFactura->avg('totallinea'), 0, ',', '.') }}</td>
+            <td class="label">Total Unidades Vendidas</td>
+            <td>{{ number_format($resumenGeneral->total_cantidad_vendida, 0, ',', '.') }}</td>
+            <td class="label">Promedio por Línea</td>
+            <td>${{ number_format($resumenGeneral->promedio_por_linea, 0, ',', '.') }}</td>
+        </tr>
+        <tr style="font-size: 14px; background-color: #f0f5ff;">
+            <td class="label">VALOR TOTAL FACTURADO</td>
+            <td colspan="3" style="font-weight: bold; text-align: right;">
+                ${{ number_format($resumenGeneral->valor_total_facturado, 0, ',', '.') }}
+            </td>
         </tr>
     </table>
 
-    <!-- 🔹 Listado Detallado -->
-    <h3>Listado Detallado</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Factura</th>
-                <th>Fecha</th>
-                <th>Cliente</th>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio Unitario</th>
-                <th>Total Línea</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($detallesFactura as $detalle)
-                <tr>
-                    <td class="text-center">{{ $loop->iteration }}</td>
-                    <td class="text-center">#{{ $detalle->factura->id ?? 'N/A' }}</td>
-                    <td class="text-center">{{ optional($detalle->factura)->fecha ? \Carbon\Carbon::parse($detalle->factura->fecha)->format('d/m/Y') : 'N/A' }}</td>
-                    <td>{{ $detalle->factura->cliente->nombre ?? 'N/A' }}</td>
-                    <td>{{ $detalle->producto->nombre ?? 'N/A' }}</td>
-                    <td class="text-center">{{ $detalle->cantidad }}</td>
-                    <td class="text-right">${{ number_format($detalle->preciounitario, 0, ',', '.') }}</td>
-                    <td class="text-right">${{ number_format($detalle->totallinea, 0, ',', '.') }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    <!-- 🔹 Resumen por Producto -->
+    @if($resumenPorProducto->count() > 0)
     <div class="summary">
         <h3>Resumen por Producto</h3>
         <table>
@@ -128,26 +153,24 @@
                 </tr>
             </thead>
             <tbody>
-                @php
-                    $productos = $detallesFactura->groupBy('producto.nombre');
-                @endphp
-                @foreach ($productos as $nombreProducto => $items)
+                @foreach ($resumenPorProducto as $item)
                     <tr>
-                        <td>{{ $nombreProducto ?? 'Sin nombre' }}</td>
-                        <td class="text-center">{{ $items->sum('cantidad') }}</td>
-                        <td class="text-right">${{ number_format($items->sum('totallinea'), 0, ',', '.') }}</td>
+                        <td>{{ $item->producto_nombre ?? 'Sin nombre' }}</td>
+                        <td class="text-center">{{ number_format($item->total_cantidad, 0, ',', '.') }}</td>
+                        <td class="text-right">${{ number_format($item->total_facturado, 0, ',', '.') }}</td>
                     </tr>
                 @endforeach
-                <tr style="background-color: #f8f9fa; font-weight: bold;">
-                    <td>TOTAL GENERAL</td>
-                    <td class="text-center">{{ $detallesFactura->sum('cantidad') }}</td>
-                    <td class="text-right">${{ number_format($detallesFactura->sum('totallinea'), 0, ',', '.') }}</td>
+                <tr class="total-row">
+                    <td colspan="2">TOTAL GENERAL</td>
+                    <td class="text-right">${{ number_format($resumenPorProducto->sum('total_facturado'), 0, ',', '.') }}</td>
                 </tr>
             </tbody>
         </table>
     </div>
+    @endif
 
-    <!-- 🔹 Resumen por Fecha -->
+
+    @if($resumenPorFecha->count() > 0)
     <div class="summary">
         <h3>Resumen por Fecha</h3>
         <table>
@@ -159,29 +182,24 @@
                 </tr>
             </thead>
             <tbody>
-                @php
-                    $porFecha = $detallesFactura->groupBy(function($item) {
-                        return optional($item->factura)->fecha ? \Carbon\Carbon::parse($item->factura->fecha)->format('d/m/Y') : 'Sin Fecha';
-                    });
-                @endphp
-                @foreach ($porFecha as $fecha => $items)
+                @foreach ($resumenPorFecha as $item)
                     <tr>
-                        <td>{{ $fecha }}</td>
-                        <td class="text-center">{{ $items->sum('cantidad') }}</td>
-                        <td class="text-right">${{ number_format($items->sum('totallinea'), 0, ',', '.') }}</td>
+                        <td class="text-center">{{ \Carbon\Carbon::parse($item->fecha_factura)->format('d/m/Y') }}</td>
+                        <td class="text-center">{{ number_format($item->total_cantidad, 0, ',', '.') }}</td>
+                        <td class="text-right">${{ number_format($item->total_facturado, 0, ',', '.') }}</td>
                     </tr>
                 @endforeach
-                <tr style="background-color: #f8f9fa; font-weight: bold;">
-                    <td>TOTAL GENERAL</td>
-                    <td class="text-center">{{ $detallesFactura->sum('cantidad') }}</td>
-                    <td class="text-right">${{ number_format($detallesFactura->sum('totallinea'), 0, ',', '.') }}</td>
+                <tr class="total-row">
+                    <td colspan="2">TOTAL GENERAL</td>
+                    <td class="text-right">${{ number_format($resumenPorFecha->sum('total_facturado'), 0, ',', '.') }}</td>
                 </tr>
             </tbody>
         </table>
     </div>
+    @endif
 
-    <div style="margin-top: 30px; text-align: center; font-size: 10px; color: #666;">
-        <p>Reporte generado el {{ \Carbon\Carbon::now()->format('d/m/Y H:i') }} por Sistema CATA</p>
+    <div class="footer">
+        <p>Reporte generado por Sistema CATA</p>
     </div>
 
 </body>

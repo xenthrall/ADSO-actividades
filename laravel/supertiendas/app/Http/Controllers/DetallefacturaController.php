@@ -201,26 +201,106 @@ class DetallefacturaController extends Controller
         return redirect()->route('detalle.index')->with('success', 'Detalle de factura eliminado exitosamente.');
     }
 
-    public function verpdfdetalle()
+    /**
+     * Muestra la vista previa del PDF con filtros.
+     */
+    public function verpdfdetalle(Request $request)
     {
-        $detallesFactura = detallefactura::with(['factura', 'producto'])->orderBy('id', 'desc')->get();
-        return view('pdf.detallefacturapdf', compact('detallesFactura'));
+        // 1. Obtener filtros
+        $fecha_inicio = $request->get('fecha_inicio');
+        $fecha_fin = $request->get('fecha_fin');
+        $producto_id = $request->get('producto_id');
+
+        $data = $this->obtenerDatosPdf($request);
+
+        return view('pdf.detallefacturapdf', $data);
     }
 
-    public function generarpdfdetalle()
+    /**
+     * Genera y descarga el PDF con filtros.
+     */
+    public function generarpdfdetalle(Request $request)
     {
-        $detallesFactura = detallefactura::with(['factura', 'producto'])->orderBy('id', 'desc')->get();
+        // 1. Obtener los datos resumidos
+        $data = $this->obtenerDatosPdf($request);
         
-        
+        // 2. Configurar Dompdf
         $dompdf = new Dompdf();
+        
+        $options = $dompdf->getOptions();
+        $options->set('isRemoteEnabled', true);
+        $dompdf->setOptions($options);
 
-        $html = view('pdf.detallefacturapdf', compact('detallesFactura'))->render();
+        $html = view('pdf.detallefacturapdf', $data)->render();
         $dompdf->loadHtml($html);
 
-        $dompdf->setPaper('A4', 'landscape');
-
+        $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        return $dompdf->stream('detallefactura.pdf');
+        return $dompdf->stream('reporte_resumido_detalles.pdf');
     }
+
+    /**
+     * Método privado para centralizar la lógica de consulta de los PDF.
+     * Esto evita duplicar código en verpdf y generarpdf.
+     */
+    private function obtenerDatosPdf(Request $request)
+    {
+        // --- 1. OBTENER PARÁMETROS DE FILTRO ---
+        $fecha_inicio = $request->get('fecha_inicio');
+        $fecha_fin = $request->get('fecha_fin');
+        $producto_id = $request->get('producto_id');
+
+        // --- 2. CREAR CONSULTA BASE CON FILTROS ---
+        $queryBase = detallefactura::query()
+            ->join('facturas', 'detallefacturas.idfactura', '=', 'facturas.id')
+            ->join('productos', 'detallefacturas.idproducto', '=', 'productos.id');
+
+        if ($fecha_inicio && $fecha_fin) {
+            $queryBase->whereBetween('facturas.fecha', [$fecha_inicio, $fecha_fin]);
+        }
+
+        if ($producto_id) {
+            $queryBase->where('detallefacturas.idproducto', $producto_id);
+        }
+
+        // --- 3. CALCULAR RESÚMENES (QUERIES EFICIENTES) ---
+        $resumenGeneral = (clone $queryBase)->select(
+            DB::raw('COUNT(DISTINCT detallefacturas.idfactura) as total_facturas'),
+            DB::raw('COUNT(detallefacturas.id) as total_lineas'),
+            DB::raw('SUM(detallefacturas.cantidad) as total_cantidad_vendida'),
+            DB::raw('SUM(detallefacturas.totallinea) as valor_total_facturado'),
+            DB::raw('AVG(detallefacturas.totallinea) as promedio_por_linea')
+        )->first(); // first() porque solo queremos una fila de resultados
+
+        // 3.b. Resumen por Producto
+        $resumenPorProducto = (clone $queryBase)->select(
+            'productos.nombre as producto_nombre',
+            DB::raw('SUM(detallefacturas.cantidad) as total_cantidad'),
+            DB::raw('SUM(detallefacturas.totallinea) as total_facturado')
+        )
+        ->groupBy('productos.nombre')
+        ->orderByDesc('total_facturado') // Ordenar por el más vendido
+        ->get();
+
+        // 3.c. Resumen por Fecha
+        $resumenPorFecha = (clone $queryBase)->select(
+            'facturas.fecha as fecha_factura', // Usar la fecha real
+            DB::raw('SUM(detallefacturas.cantidad) as total_cantidad'),
+            DB::raw('SUM(detallefacturas.totallinea) as total_facturado')
+        )
+        ->groupBy('facturas.fecha')
+        ->orderBy('facturas.fecha') // Ordenar cronológicamente
+        ->get();
+
+        return [
+            'resumenGeneral' => $resumenGeneral,
+            'resumenPorProducto' => $resumenPorProducto,
+            'resumenPorFecha' => $resumenPorFecha,
+            'fecha_inicio' => $fecha_inicio, // Pasar filtros para mostrarlos
+            'fecha_fin' => $fecha_fin,
+            'producto' => $producto_id ? producto::find($producto_id) : null,
+        ];
+    }
+
 }
