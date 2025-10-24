@@ -121,7 +121,7 @@
                 @endif
             </form>
         </div>
-    </div>
+    </div>    
     <div class="row">
         <div class="col-md-12 mt-2">
             <div class="card card-primary mt-3">
@@ -138,6 +138,14 @@
                         <a href="{{ route('producto.pdf') }}" class="btn btn-info btn-sm" target="_blank">
                             <i class="fas fa-eye"></i> Ver PDF
                         </a>
+
+                        @include('charts.productos')
+
+                        <!-- Botón de Gráficas -->
+                        <button type="button" class="btn btn-primary"
+                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            <i class="fas fa-chart-bar me-2"></i> Ver Gráfica
+                        </button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -209,6 +217,9 @@
 @stop
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
+    </script>
     <script>
         function confirmarEliminacion(event) {
             event.preventDefault();

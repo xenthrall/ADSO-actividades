@@ -18,66 +18,59 @@ class ProductoController extends Controller
      * Display a listing of the resource.
      */
    public function index(Request $request)
-    {
+{
+    // --- filtros existentes ---
+    $search = $request->get('search');
+    $categoriaId = $request->get('categoria_id');
+    $marcaId = $request->get('marca_id');
+    $estado = $request->get('estado');
 
+    $query = Producto::with(['categoria', 'marca']);
 
-
-        // Obtener parámetros de filtro
-        $search = $request->get('search');
-        $categoriaId = $request->get('categoria_id');
-        $marcaId = $request->get('marca_id');
-        $estado = $request->get('estado');
-
-
-         // Construir consulta
-        $query = Producto::with(['categoria', 'marca']);
-
-        // Filtro de búsqueda
-        if ($search) {
-            $query->where(
-                function($query) use ($search)
-                {
-                $query->where('nombre', 'LIKE', "%{$search}%")
+    if ($search) {
+        $query->where(function($query) use ($search) {
+            $query->where('nombre', 'LIKE', "%{$search}%")
                 ->orWhere('descripcion', 'LIKE', "%{$search}%");
-                }
-        );
-        }
-
-        // Filtro por categoría
-        if ($categoriaId) {
-            $query->where('idcategoria', $categoriaId);
-        }
-
-        // Filtro por marca
-        if ($marcaId) {
-            $query->where('idmarca', $marcaId);
-        }
-
-        // Filtro por estado
-        if ($estado !== null) {
-            $query->where('estado', $estado);
-        }
-
-        // Ordenamiento
-        $sort = $request->get('sort', 'nombre');
-        $direction = $request->get('direction', 'asc');
-
-
-
-        $query->orderBy($sort, $direction);
-
-
-
-        $productos = $query->paginate(200);
-
-
-        $categorias = Categoria::all();
-        $marcas = Marca::all();
-
-
-
-        return view('producto.index', compact('productos', 'categorias', 'marcas', 'search', 'categoriaId', 'marcaId', 'estado'));
+        });
     }
+
+    if ($categoriaId) {
+        $query->where('idcategoria', $categoriaId);
+    }
+
+    if ($marcaId) {
+        $query->where('idmarca', $marcaId);
+    }
+
+    if ($estado !== null) {
+        $query->where('estado', $estado);
+    }
+
+    $sort = $request->get('sort', 'nombre');
+    $direction = $request->get('direction', 'asc');
+    $query->orderBy($sort, $direction);
+
+    $productos = $query->paginate(200);
+    $categorias = Categoria::all();
+    $marcas = Marca::all();
+
+    // 🔹 Agrupar productos por categoría
+    $productosPorCategoria = Producto::selectRaw('categorias.nombre as categoria, COUNT(productos.id) as total')
+        ->join('categorias', 'productos.idcategoria', '=', 'categorias.id')
+        ->groupBy('categorias.nombre')
+        ->get();
+
+    // Preparar datos para Chart.js
+    $labels = $productosPorCategoria->pluck('categoria');
+    $data = $productosPorCategoria->pluck('total');
+
+    return view('producto.index', compact(
+        'productos', 'categorias', 'marcas',
+        'search', 'categoriaId', 'marcaId', 'estado',
+        'labels', 'data'
+    ));
+}
+
 
     /**
      * Show the form for creating a new resource.
