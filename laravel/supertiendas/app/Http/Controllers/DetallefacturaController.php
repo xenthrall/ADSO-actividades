@@ -70,7 +70,7 @@ class DetallefacturaController extends Controller
 
         // Ordenar y Paginar
         $query->orderBy('id', 'desc');
-        $detallesFactura = $query->paginate(200);
+        $detallesFactura = $query->paginate(15);
 
         // --- 3. OBTENER PRODUCTOS PARA FILTRO ---
         $productos = producto::select('productos.*')
