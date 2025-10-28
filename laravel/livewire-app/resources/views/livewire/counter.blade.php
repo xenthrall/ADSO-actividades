@@ -2,5 +2,6 @@
     <h1>Counter: {{ $count }}</h1>
     <button wire:click="increment">Increment</button>
     <button wire:click="decrement">Decrement</button>
-    
+    <button wire:click="mostrar">Mostrar</button>
+
 </div>
