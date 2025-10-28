@@ -10,6 +10,8 @@ use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProductoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashController;
+use App\Http\Controllers\AuthController;
+
 
 
 Route::get('/', function () {return view(view: 'index');})->name('index');
@@ -153,3 +155,8 @@ route::get('producto/generarpdf',[ProductoController::class,'generarpdfproducto'
 //pdf detallefactura
 route::get('detalle/pdf',[DetallefacturaController::class,'verpdfdetalle'])->name('detalle.pdf');
 route::get('detalle/generarpdf',[DetallefacturaController::class,'generarpdfdetalle'])->name('detalle.generarpdf');
+
+
+//rutas para auth
+
+route::get('/login',[AuthController::class,'verlogin'])->name('auth.login');
