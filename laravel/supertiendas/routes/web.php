@@ -24,6 +24,11 @@ Route::get('/login', [AuthController::class, 'verlogin'])->name('login');
 Route::post('/loginsubmit', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Registro de usuarios
+Route::get('/register', [AuthController::class, 'verRegistro'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
+
+
 // Grupo protegido por autenticación
 Route::middleware(['auth'])->group(function () {
 

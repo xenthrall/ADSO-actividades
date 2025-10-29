@@ -175,7 +175,7 @@
                                 <div class="text-center">
                                     <p class="text-muted mb-0">
                                         ¿No tienes una cuenta?
-                                        <a href="" class="text-decoration-none fw-semibold text-success">
+                                        <a href="{{ route('register') }}" class="text-decoration-none fw-semibold text-success">
                                             Regístrate aquí
                                         </a>
                                     </p>
