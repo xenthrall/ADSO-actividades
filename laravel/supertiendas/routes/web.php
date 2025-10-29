@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashController;
 use App\Http\Controllers\AuthController;
 
+use App\Http\Controllers\PerfilController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/perfil', [PerfilController::class, 'index'])->name('perfil.index');
+    Route::post('/perfil', [PerfilController::class, 'update'])->name('perfil.update');
+});
+
+
 
 
 Route::get('/', function () {return view(view: 'index');})->name('index');
@@ -161,4 +169,4 @@ route::get('detalle/generarpdf',[DetallefacturaController::class,'generarpdfdeta
 
 route::get('/login',[AuthController::class,'verlogin'])->name('auth.login');
 route::post('/loginsubmit',[AuthController::class,'login'])->name('login.submit');
-route::post('/logout',[AuthController::class,'logout'])->name('logout.submit');
+route::post('/logout',[AuthController::class,'logout'])->name('logout');

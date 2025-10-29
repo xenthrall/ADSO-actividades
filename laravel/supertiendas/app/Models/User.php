@@ -65,8 +65,6 @@ class User extends Authenticatable
      */
     public function adminlte_profile_url()
     {
-        // Si tienes una ruta de perfil real, ponla aquí, ej:
-        // return route('profile.show', $this->id);
-        return '#'; // evita el error si no hay perfil aún
+        return 'perfil.index';
     }
 }
