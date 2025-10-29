@@ -259,7 +259,7 @@ return [
     |
     */
 
-    'use_route_url' => true,
+    'use_route_url' => false,
     'dashboard_url' => 'index',
     'logout_url' => 'logout',
     'login_url' => 'login',

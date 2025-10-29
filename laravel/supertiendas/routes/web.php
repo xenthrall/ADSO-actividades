@@ -161,3 +161,4 @@ route::get('detalle/generarpdf',[DetallefacturaController::class,'generarpdfdeta
 
 route::get('/login',[AuthController::class,'verlogin'])->name('auth.login');
 route::post('/loginsubmit',[AuthController::class,'login'])->name('login.submit');
+route::post('/logout',[AuthController::class,'logout'])->name('logout.submit');
