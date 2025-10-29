@@ -89,7 +89,7 @@
                             </div>
 
                             <!-- CORREGIDO: Se agregó la comilla simple que faltaba -->
-                            <form method="POST" action="">
+                            <form method="POST" action="{{ route('login.submit') }}">
                                 @csrf
 
                                 <!-- Alert Messages -->
